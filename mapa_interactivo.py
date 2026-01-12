@@ -150,3 +150,4 @@ def main():
             break
         agregar_obstaculos_usuario(mapa)
 main()
+#fin
