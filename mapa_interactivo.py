@@ -16,9 +16,9 @@ COSTOS = {
 }
 
 def crear_mapa():
-    filas = int(input('ingrese la cantidad de filas que tendra el mapa'))
-    columnas = int(input('ingrese la cantidad de columnas que tendra el mapa'))
-    mapa = [[CAMINO_LIBRE for _ in range(columnas)] for _ in range(filas)] # tiene que estar al reves tu Fila y columna
+    filas = int(input(f'\ningrese la cantidad de filas que tendra el mapa: '))
+    columnas = int(input(f'\ningrese la cantidad de columnas que tendra el mapa: '))
+    mapa = [[CAMINO_LIBRE for _ in range(filas)] for _ in range(columnas)] # tiene que estar al reves tu Fila y columna
     return mapa
 
 def agregar_obstaculos(mapa, prob_edificio, prob_agua):
@@ -63,10 +63,10 @@ def pedir_coordenadas(nombre, mapa):
         x = int(input('fila: '))
         y = int(input('columna: '))
         if x < 0 or x >= filas or y < 0 or y >= columnas:
-            print('la coordenada es invalida, intente de nuevo')
+            print(f'\nla coordenada es invalida, intente de nuevo')
             continue
         if mapa[x][y] == EDIFICIO:
-            print('no se puede usar un edificio, intente de nuevo')
+            print(f'\nno se puede usar un edificio, intente de nuevo')
             continue
         return (x, y)
 def dijkstra(mapa, inicio, destino):
@@ -97,15 +97,15 @@ def dijkstra(mapa, inicio, destino):
             nx, ny = x + dx, y + dy
             if not (0 <= nx < filas and 0 <= ny < columnas):
                 continue
-        if (nx, ny) in visitados:
-            continue
-        if mapa[nx][ny] == EDIFICIO:
-            continue
-        nuevo_costo = costo + COSTOS.get(mapa[nx][ny], 1)
-        if nuevo_costo < dist[nx][ny]:
-            dist[nx][ny] = nuevo_costo
-            padre[nx][ny] = (x, y)
-            heapq.heappush(pq, (nuevo_costo, (nx, ny)))
+            if (nx, ny) in visitados:
+                continue
+            if mapa[nx][ny] == EDIFICIO:
+                continue
+            nuevo_costo = costo + COSTOS.get(mapa[nx][ny], 1)
+            if nuevo_costo < dist[nx][ny]:
+                dist[nx][ny] = nuevo_costo
+                padre[nx][ny] = (x, y)
+                heapq.heappush(pq, (nuevo_costo, (nx, ny)))
     return None, float('inf')
 def reconstruir_camino(padre, inicio, destino):
     if padre[destino[0]][destino[1]] is None and destino != inicio:
@@ -123,7 +123,7 @@ def agregar_obstaculos_usuario(mapa):
     for _ in range(n):
         x = int(input('Fila: '))
         y = int(input('Columna: '))
-        tipo = input('Tipo: X (edificio) o ~ (agua):')
+        tipo = input('Tipo: X (edificio) o ~ (agua): ')
         if 0 <= x < len(mapa) and 0 <= y < len(mapa[0]):
             if tipo == "X":
                 mapa[x][y] = EDIFICIO
@@ -132,14 +132,19 @@ def agregar_obstaculos_usuario(mapa):
 
 def main():
     mapa = crear_mapa()
+    agregar_obstaculos(mapa, prob_edificio, prob_agua)
     mostrar_mapa(mapa)
     inicio = pedir_coordenadas('inicio', mapa)
     destino = pedir_coordenadas('destino', mapa)
-    agregar_obstaculos(mapa, prob_edificio, prob_agua)
 
     while True:
-        ruta = dijkstra(mapa, inicio, destino)
-        mostrar_mapa(mapa, ruta)
+        ruta, costo = dijkstra(mapa, inicio, destino)
+        if ruta:
+            print(f'\nCamino encontrado con costo: {costo}')
+            mostrar_mapa(mapa, ruta)
+        else: 
+            print(f'\nNo se encontraron caminos validos')
+            mostrar_mapa(mapa, ruta)
         opcion = input('desea agregar mas obstaculos? (s/n):').lower()
         if opcion != "s":
             break
