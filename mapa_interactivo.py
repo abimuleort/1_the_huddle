@@ -1,35 +1,36 @@
-import heapq
-import random
+import heapq    # Permite usar colas de prioridad 
+import random   # Se utiliza para generar numeros aleatorios
 
-CAMINO_LIBRE = 0
-EDIFICIO = 1
-AGUA = 2
+# ---------- Representacion del terreno del Mapa ----------
+CAMINO_LIBRE = 0  # Camino libre sin costo de circulacion
+EDIFICIO = 1      # Edificio (intransitable)
+AGUA = 2          # Agua (Transitable con mayor costo)
 
-prob_edificio = 0.18
-prob_agua = 0.12
+prob_edificio = 0.18  # Probabilidad del 18% de de que una celda sea edificio
+prob_agua = 0.12      # Probabilidad del 12% de de que una celda sea agua 
 
 MOVIMIENTOS = [(-1,0), (1,0), (0,-1), (0,1)]
 
-COSTOS = {
+COSTOS = {            # Se define cuanto cuesta pasar cada tipo de terreno
     CAMINO_LIBRE: 1,
     AGUA: 3
 }
-
+# ---------- Creacion del Mapa ----------
 def crear_mapa():
-    filas = int(input(f'\ningrese la cantidad de filas que tendra el mapa: '))
-    columnas = int(input(f'\ningrese la cantidad de columnas que tendra el mapa: '))
-    mapa = [[CAMINO_LIBRE for _ in range(filas)] for _ in range(columnas)] # tiene que estar al reves tu Fila y columna
-    return mapa
+    filas = int(input(f'\ningrese la cantidad de filas que tendra el mapa: '))             # Ingreso de datos del usuario para filas
+    columnas = int(input(f'\ningrese la cantidad de columnas que tendra el mapa: '))       # Ingreso de datos del usuario para columnas
+    mapa = [[CAMINO_LIBRE for _ in range(filas)] for _ in range(columnas)]                 # Se crea una matriz vacia (llena de 0)
+    return mapa                                                                            # Se retorna el mapa 
 
 def agregar_obstaculos(mapa, prob_edificio, prob_agua):
-    filas = len(mapa)
-    columnas = len(mapa[0])
+    filas = len(mapa)                                        
+    columnas = len(mapa[0])                            # Obtiene el tamanho del mapa
     for i in range(filas):
-        for j in range(columnas):
-            rand = random.random()
+        for j in range(columnas):                      # Recorre cada celda del mapa (filas y columnas)
+            rand = random.random()                     # Genera un numero aleatorio entre 0 y 1
 
-            if rand < prob_edificio:
-                mapa[i][j] = EDIFICIO
+            if rand < prob_edificio:                   
+                mapa[i][j] = EDIFICIO                  # Si el numero cae dentro de la probabilidad, coloca un edificio
             elif rand < prob_edificio + prob_agua:
                 mapa[i][j] = AGUA
 
