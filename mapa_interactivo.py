@@ -52,7 +52,8 @@ def mostrar_mapa(mapa, ruta=None):                # Muestra el mapa en pantalla
             elif mapa[i][j] == AGUA:
                 print('~', end=' ')               # Si la celda es agua muestra ~ 
             elif mapa[i][j] == EDIFICIO:
-                print('X', end=' ')               # Si la celda es edificio muestra X                  
+                print('X', end=' ')               # Si la celda es edificio muestra X     
+        print('#')             
     print(' ' + '#' * (columnas *3 + 1))          # Cierra el mapa
 
 # ---------- Coordenadas ----------
@@ -120,7 +121,7 @@ def reconstruir_camino(padre, inicio, destino):                            # Rec
     while actual is not None:
         camino.append(actual)                                              # Mientras haya una celda anterior esta se agrega al camino
         actual = padre[actual[0]][actual[1]]                               # Se meueve a la celda anterior
-    camino.reverse()                                                       # Invierte la l.ista para que vaya de inicio a destino
+    camino.reverse()                                                       # Invierte la lista para que vaya de inicio a destino
     return camino                                                          # Devuelve la ruta completa
 
 # ---------- Obstaculos Adicionales ----------
